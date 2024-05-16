@@ -65,7 +65,7 @@ ExecStart=/usr/bin/python3 {os.path.realpath(__file__)}
 Description=Watch for Aurora events
 
 [Timer]
-OnCalendar=*-*-* *:2/{int(config.checkInterval)}
+OnCalendar=*-*-* *:0/{int(config.checkInterval)}
 Persistent=true
 
 [Install]
