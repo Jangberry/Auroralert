@@ -27,7 +27,7 @@ checkInterval = 5 # That's an int representing the number of minutes between eac
 ```bash
 python auroralert.py
 # It will just run, and create timers to check the aurora borealis every `checkInterval` minutes, you'll then need to run
-ln -s /path/to/auroralert/Auroralert.timer /path/to/auroralert/Auroralert.service ~/.config/systemd/user/
+ln -L /path/to/auroralert/Auroralert.timer /path/to/auroralert/Auroralert.service ~/.config/systemd/user/
 systemctl --user enable Auroralert.timer
 systemctl --user start Auroralert.timer
 ```
