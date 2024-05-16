@@ -35,14 +35,22 @@ def main():
                 alert.alert(point['Aurora'], (point['Latitude'], point['Longitude']), data.forecast_time)
     
     import os.path
-    if not os.path.exists('Auroralert.service') or not os.path.exists('Auroralert.timer'):
-        print(f"To enable auto alerts (run {os.path.realpath(__file__)} every {int(config.checkInterval)} minutes), run the following commands:")
-        print("ln -L Auroralert.service Auroralert.timer ~/.config/systemd/user/")
-        print("systemctl --user enable Auroralert.timer")
-        print("systemctl --user start Auroralert.timer")
+    if not os.path.exists('Auroralert.service') or not os.path.exists('Auroralert.timer') or os.path.exists('UpdateServices'):
+        if os.path.exists('UpdateServices'):
+            os.remove('UpdateServices')
+            print("Please run the following commands (otherwise systemd will refuse to launch the service because too recent):")
+            print("systemctl --user daemon-reload")
+        else:
+            print(f"To enable auto alerts (run '{os.path.realpath(__file__)}' every {int(config.checkInterval)} minutes), run the following commands:")
+            print("ln -L Auroralert.service Auroralert.timer ~/.config/systemd/user/")
+            print("systemctl --user enable Auroralert.timer")
+            print("systemctl --user start Auroralert.timer")
+            print("")
+            print('If for some reason you want to recreate the service files, run the following command:')
+            print('touch UpdateServices')
     
-    with open('Auroralert.service', 'w') as f:
-        f.write(f'''[Unit]
+        with open('Auroralert.service', 'w') as f:
+            f.write(f'''[Unit]
 Description=Watch for Aurora events
 After=network-online.target
 Wants=network-online.target
@@ -52,8 +60,8 @@ WorkingDirectory={os.path.dirname(os.path.realpath(__file__))}
 ExecStart=/usr/bin/python3 {os.path.realpath(__file__)}
 ''')
     
-    with open('Auroralert.timer', 'w') as f:
-        f.write(f'''[Unit]
+        with open('Auroralert.timer', 'w') as f:
+            f.write(f'''[Unit]
 Description=Watch for Aurora events
 
 [Timer]
