@@ -33,7 +33,7 @@ def main():
     import os.path
     if not os.path.exists('Auroralert.service') or not os.path.exists('Auroralert.timer'):
         print(f"To enable auto alerts (run {os.path.realpath(__file__)} every {int(config.checkInterval)} minutes), run the following commands:")
-        print("ln -s Auroralert.service Auroralert.timer ~/.config/systemd/user/")
+        print("ln -L Auroralert.service Auroralert.timer ~/.config/systemd/user/")
         print("systemctl --user enable Auroralert.timer")
         print("systemctl --user start Auroralert.timer")
     
