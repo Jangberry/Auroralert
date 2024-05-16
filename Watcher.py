@@ -24,9 +24,13 @@ def main():
         ]
     r = requests.get('https://services.swpc.noaa.gov/json/ovation_aurora_latest.json')
     data = MeshData(r.json())
+    
+    print("Observation time :", data.observation_time.astimezone(datetime.datetime.now().astimezone().tzinfo))
+    print("Forecast time :", data.forecast_time.astimezone(datetime.datetime.now().astimezone().tzinfo))
 
     for point in data:
         if point['Latitude'] == round(config.POI['Latitude']) and point['Longitude'] == round(config.POI['Longitude']):
+            print(f"Probability at {point['Latitude']}, {point['Longitude']} is {point['Aurora']}")
             for alert in alerts:
                 alert.alert(point['Aurora'], (point['Latitude'], point['Longitude']), data.forecast_time)
     
@@ -53,7 +57,7 @@ ExecStart=/usr/bin/python3 {os.path.realpath(__file__)}
 Description=Watch for Aurora events
 
 [Timer]
-OnCalendar=*-*-* *:0/{int(config.checkInterval)}
+OnCalendar=*-*-* *:2/{int(config.checkInterval)}
 Persistent=true
 
 [Install]
