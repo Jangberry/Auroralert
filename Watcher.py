@@ -42,11 +42,12 @@ def main():
             print("systemctl --user daemon-reload")
         else:
             print(f"To enable auto alerts (run '{os.path.realpath(__file__)}' every {int(config.checkInterval)} minutes), run the following commands:")
-            print("ln -L Auroralert.service Auroralert.timer ~/.config/systemd/user/")
-            print("systemctl --user enable Auroralert.timer")
-            print("systemctl --user start Auroralert.timer")
+            print("ln -L Auroralert.service Auroralert.timer ~/.config/systemd/user/\t# If you want it to be a user unit (won't run unless you have an opened session, but less authorizations)")
+            print("ln -L Auroralert.service Auroralert.timer /etc/systemd/system\t# If you want it to be a system unit")
+            print("systemctl enable Auroralert.timer\t# Add --user if you want it to be a user unit")
+            print("systemctl start Auroralert.timer\t# Add --user if you want it to be a user unit")
             print("")
-            print('If for some reason you want to recreate the service files, run the following command:')
+            print('If for some reason you want to recreate the service files, run the following command and rerun this file:')
             print('touch UpdateServices')
     
         with open('Auroralert.service', 'w') as f:
