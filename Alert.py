@@ -14,7 +14,7 @@ class DiscordWebhookAlertManager(AlertManager):
 
     def alert(self, probability = 0, location = (0, 0), date = datetime.datetime.now() + datetime.timedelta(minutes=30)):
         # Send a message to the Discord webhook, with notification if probability is high
-        if probability > 0:
+        if probability > 1:
             requests.post(self.url, json={"content": f"Aurora probability around **{date.astimezone(pytz.timezone('Europe/Paris')).strftime(DiscordWebhookAlertManager.dateformat)}** (*{date.strftime(AlertManager.dateformat)}*) next to `{location[1]}, {location[0]}` is **{probability}**" + (" @everyone" if probability > 10 else ""), "flags": (1 if probability < 3 else 0) << 12})
 
 class SMSAlertManager(AlertManager):
